@@ -1,1 +1,10 @@
+form action="todos" method="get"
+    input name="q" placeholder="Sök på todos" type="text"
+    input type="submit" value="Sökish!"
 
+p Välkommen till Elias Snipe, stället där all snipes är förevigade
+img src="\img\Snapchat-1519646823.jpg" id="ludde"
+
+    - @todos.each do |todo|
+        p = todo["name"]
+        a href='/todo/#{todo["id"]}/edit' Ändra

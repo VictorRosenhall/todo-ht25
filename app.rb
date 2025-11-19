@@ -21,4 +21,36 @@ get '/' do
     slim(:index)
 end
 
+get '/todos' do
+  db = SQLite3::Database.new("db/todos.db")
+  #ge oss hashes ist för arrayer [{}, {}, {}]
+  db.results_as_hash = true
+
+  #Använd SQL för att kommunicera med db och också hämta allt från db
+
+  query=params[:q]
+
+  if query && !query.empty?
+    @todos = db.execute("SELECT * FROM todos WHERE name LIKE ?", "%#{query}%")
+  else 
+    @todos = db.execute("SELECT * FROM todos")
+  end
+  slim(:index)
+end
+
+get('/todos/:id/edit') do
+  #ta ut id
+  id = params[:id].to_i
+
+
+  #hämta all skit
+  db = SQLite3::Database.new("db/todos.db")
+  #ge oss hashes ist för arrayer [{}, {}, {}]
+  db.results_as_hash = true
+  @todos = db.execute("SELECT * FROM todos WHERE id = ?",id).first
+
+  #visa en slimfil
+  slim(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+end 
+
 
