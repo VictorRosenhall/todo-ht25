@@ -1,0 +1,6 @@
+h2 Uppdatera todo
+
+form action="/todos/#{@todos["id"]}/update" method="post" 
+    input type="text" name="name" value='#{@fruits["name"]}'
+    input type="number" name="amount" value='#{@fruits["amount"]}'
+    input type="submit" value="Uppdatera"

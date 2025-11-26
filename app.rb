@@ -38,10 +38,18 @@ get '/todos' do
   slim(:index)
 end
 
+post('/todos/:id/delete') do
+  db = SQLite3::Database.new('db/todos.db') # koppling till databasen
+  #extrahera id för att få rätt frukt
+  denna_ska_bort = params[:id]
+  #ta bort från db
+  db.execute("DELETE FROM todos WHERE id = ?", [denna_ska_bort])
+  redirect('/todos')
+end
+
 get('/todos/:id/edit') do
   #ta ut id
   id = params[:id].to_i
-
 
   #hämta all skit
   db = SQLite3::Database.new("db/todos.db")
@@ -50,7 +58,7 @@ get('/todos/:id/edit') do
   @todos = db.execute("SELECT * FROM todos WHERE id = ?",id).first
 
   #visa en slimfil
-  slim(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
+  slim(:edit)
 end 
 
 
