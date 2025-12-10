@@ -6,7 +6,7 @@ require 'sinatra/reloader'
 
 
 # Funktion för att prata med databasen
-# Exempel på användning: db.execute('SELECT * FROM fruits')
+# Exempel på användning: db.execute('SELECT * FROM todos')
 def db
   return @db if @db
 
@@ -17,11 +17,12 @@ def db
 end
 
 # Routen /
-get '/' do
-    slim(:index)
+get('/') do
+
+  slim(:index)
 end
 
-get '/todos' do
+get('/todos') do
   db = SQLite3::Database.new("db/todos.db")
   #ge oss hashes ist för arrayer [{}, {}, {}]
   db.results_as_hash = true
@@ -48,17 +49,31 @@ post('/todos/:id/delete') do
 end
 
 get('/todos/:id/edit') do
-  #ta ut id
-  id = params[:id].to_i
-
-  #hämta all skit
   db = SQLite3::Database.new("db/todos.db")
-  #ge oss hashes ist för arrayer [{}, {}, {}]
   db.results_as_hash = true
-  @todos = db.execute("SELECT * FROM todos WHERE id = ?",id).first
 
-  #visa en slimfil
+  id = params[:id].to_i
+  @todo = db.execute("SELECT * FROM todos WHERE id = ?", [id]).first
+
   slim(:edit)
-end 
+end
 
+post('/todos/:id/update') do
+  db = SQLite3::Database.new("db/todos.db")
 
+  id = params[:id].to_i
+  name = params[:name]
+  description = params[:description]
+
+  db.execute("UPDATE todos SET name=?, description=? WHERE id=?", [name, description, id])
+
+  redirect('/todos')
+end
+
+post('/todos') do
+  db = SQLite3::Database.new("db/todos.db")
+  name = params[:q]
+  description = params[:description]
+  db.execute("INSERT INTO todos (name, description) VALUES (?, ?)", [name, description])
+  redirect('/todos')
+end
